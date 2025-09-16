@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      color: #fff;
+    }
+    .app {
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 300px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      width: 80%;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer;
+    }
+    .weather {
+      margin-top: 20px;
+    }
+    .temp {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .desc {
+      text-transform: capitalize;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h2>Weather App</h2>
+    <input type="text" id="cityInput" placeholder="Enter city name" />
+    <button onclick="getWeather()">Get Weather</button>
+    <div class="weather" id="weather"></div>
+  </div>
+
+  <script>
+    const apiKey = https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}; // 🔑 Replace with your OpenWeatherMap API key
+
+    async function getWeather() {
+      const city = document.getElementById("cityInput").value;
+      if (!city) {
+        alert("Please enter a city name!");
+        return;
+      }
+
+      try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("City not found");
+        const data = await res.json();
+
+        document.getElementById("weather").innerHTML = `
+          <div class="temp">${data.main.temp}°C</div>
+          <div class="desc">${data.weather[0].description}</div>
+          <div>Humidity: ${data.main.humidity}%</div>
+          <div>Wind: ${data.wind.speed} m/s</div>
+        `;
+      } catch (err) {
+        document.getElementById("weather").innerHTML = `<p>❌ ${err.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
